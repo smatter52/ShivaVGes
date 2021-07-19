@@ -13,7 +13,8 @@ III.	TESTING
 
 IV.	IMPLEMENTATION
 
-## I.	I was looking for a graphics package to implement control panes on my Raspberry PI4
+## I.	Why? Raspberry PI!	
+	I was looking for a graphics package to implement control panes on my Raspberry PI4
 	and discovered AJ Starks implementation for OpenVG. Compiling it I found it would not run,
 	on the PI4, Raspberry had voided the PI3 support for OpenVG. Now this is poor and without
 	reasonable excuse, standards allow continuity and progress for developers. We are not all
