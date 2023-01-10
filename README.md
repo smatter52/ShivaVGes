@@ -23,7 +23,7 @@ IV.	IMPLEMENTATION
 	To fix this I have modified the ShivaVG impemetation of Ivan Leben to interface via
 	OpenGL ES 3.0 on EGL and X11.
 
-	Thanks to André Bergner for the PI4 openglex.cpp example. This pointed the way.  
+	Thanks to AndrÃ© Bergner for the PI4 openglex.cpp example. This pointed the way.  
 
 ## II. BUILD
 
@@ -208,4 +208,6 @@ vguComputeWarpQuadToSquare ............ FULLY implemented
 vguComputeWarpSquareToQuad ............ FULLY implemented
 vguComputeWarpQuadToQuad .............. FULLY implemented
 ```
+ChiefEngineer
 
+![HelloVG](https://user-images.githubusercontent.com/31661334/211565061-ff71fade-3d6c-4d1d-9e01-8e3c74997534.png)
