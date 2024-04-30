@@ -845,6 +845,7 @@ shStrokePath(VGContext * c, SHPath * p)
          SET2V(dashL1, l1);
          SET2V(dashR1, r1);
 
+         int cnt = 500 ;   // backstop on duff coords
          do {
             /* Interpolate point on the current subdiv segment */
             nextDashLength = dashLength + dashPattern[dashIndex];
@@ -889,7 +890,7 @@ shStrokePath(VGContext * c, SHPath * p)
             }
 
             /* Consume dash segments until subdiv end met */
-         } while (nextDashLength < strokeLength + norm);
+         } while (nextDashLength < (strokeLength + norm) && cnt-- > 0);
 
       } else {
 

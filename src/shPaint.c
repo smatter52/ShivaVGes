@@ -672,13 +672,9 @@ int shDrawRadialGradientMesh(SHPaint * p, SHVector2 * min, SHVector2 * max,
    SHVector2 c, cs ;
    SET2(c, cx, cy) ;
    TRANSFORM2TO(c, (*m), cs);
-   GLuint shdr_loc ;
-   shdr_loc  = glGetUniformLocation  ( shaderProgram , "Angle");
-   glUniform1f(shdr_loc, 3.142*2) ;
-   shdr_loc  = glGetUniformLocation  ( shaderProgram , "Radius");
-   glUniform1f(shdr_loc, r) ;
-   shdr_loc  = glGetUniformLocation  ( shaderProgram , "Centre");
-   glUniform2f(shdr_loc, cs.x+1.0, cs.y+1.0) ;
+   glUniform1f(angle_loc, 3.142*2) ;
+   glUniform1f(radius_loc, r) ;
+   glUniform2f(centre_loc, cs.x+1.0, cs.y+1.0) ;
    fprintf(stderr,"Centre: %f %f Radius: %f\n",cs.x+1.0,cs.y+1.0, r) ;
 
 // updating attribute values
@@ -752,13 +748,11 @@ int shDrawPatternMesh(SHPaint * p, SHVector2 * min, SHVector2 * max,
    GLvoid* vertices  = (GLvoid*) &quadv;
 	GLvoid* textures  = (GLvoid*) &quadt;
 // updating attribute values
-   GLint Tex_loc  = glGetAttribLocation(shaderProgram, "texcoord") ;
-
 // enabling vertex arrays
    glVertexAttribPointer(position_loc, 2, GL_FLOAT, GL_FALSE, 0, vertices);
 	glEnableVertexAttribArray(position_loc);
-	glVertexAttribPointer(Tex_loc, 2, GL_FLOAT, GL_FALSE, 0, textures);
-	glEnableVertexAttribArray(Tex_loc);
+	glVertexAttribPointer(texc_loc, 2, GL_FLOAT, GL_FALSE, 0, textures);
+	glEnableVertexAttribArray(texc_loc);
 
    // Tell the frag shader switch (linear)
    glUniform1i(tflag_loc, 1) ;

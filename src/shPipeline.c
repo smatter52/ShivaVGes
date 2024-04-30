@@ -30,7 +30,7 @@
 #include "shCommons.h"
 
 // A mat4 identity matrix
-static SHfloat migu[16] = {1.0,0,0,0 ,0,1.0,0,0, 0,0,1.0,0, 0,0,0,1.0};
+// static SHfloat migu[16] = {1.0,0,0,0 ,0,1.0,0,0, 0,0,1.0,0, 0,0,0,1.0};
 
 static void
 shPremultiplyFramebuffer(void)
@@ -511,11 +511,8 @@ VG_API_CALL void vgDrawPath(VGPath path, VGbitfield paintModes)
    shMatrixToGL(&context->pathTransform, mgl);
 
 // Matrix multiplication done in vertex shader
-   GLint locm ;
-   locm = glGetUniformLocation(shaderProgram, "mview") ;
+
    glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) mgl );
-//   locm = glGetUniformLocation(shaderProgram, "tview") ;
-//   glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) mgl );
 
    // TODO: bisogna capire se serve sempre abilitare la scrittura nello stencil (sembra crei problemi a test_composition)
    if (paintModes & VG_FILL_PATH) {
@@ -617,8 +614,8 @@ VG_API_CALL void vgDrawPath(VGPath path, VGbitfield paintModes)
       }
    }
 
-// Return matrix to identity
-   glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) migu );
+// Return matrix to identity  (not)
+//   glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) migu );
 
    if (context->scissoring == VG_TRUE)
       glDisable(GL_SCISSOR_TEST);
@@ -653,8 +650,6 @@ VG_API_CALL void vgDrawImage(VGImage image)
   /* Apply path to surface transformation */
    SHImage *i = (SHImage *) image;
    shMatrixToGL(&context->pathTransform, mgl);
-   GLint locm ;
-   locm = glGetUniformLocation(shaderProgram, "mview") ;
    glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) mgl );
 
    /* Clamp to edge for proper filtering, modulate for multiply mode */
@@ -786,7 +781,6 @@ VG_API_CALL void vgDrawImage(VGImage image)
 
    glDisableVertexAttribArray(texc_loc);
    glUniform1i(tflag_loc, 0) ;
-   glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) migu );
 
 
    if (context->scissoring == VG_TRUE)

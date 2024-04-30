@@ -17,7 +17,18 @@ EGLSurface  egl_surface;
 
 // Shader connections
 GLuint shaderProgram ;
-GLint tflag_loc, position_loc, color4_loc, texc_loc, texs_loc;
+GLint tflag_loc,   		// texgenflag
+		position_loc, 		// position
+      color4_loc,       // color4
+      texc_loc,         // texcoord
+      texs_loc,         // tex_s
+      angle_loc,        // radial shader
+      radius_loc,
+      centre_loc ;
+GLint locm,    // mview
+      loct ;   // tview
+
+static char windowname[32] = "OpenVG";
 
 // Shaders
 const char vertex_src[] = {
@@ -155,8 +166,14 @@ GLuint load_shader (const char *shader_source, GLenum type)
    return shader;
 }
 
+// Set Window name
+void SetWindowName(char *name)
+{
+   strncpy(windowname, name, 30) ;
+   windowname[31] = '\000' ;
+}
 
-// Set the graphics hardware
+// Set up the graphics hardware
 int shGLESinit(GLint width, GLint height)
 {
 
@@ -170,7 +187,7 @@ int shGLESinit(GLint width, GLint height)
       return 1;
    }
 
-   Window root  =  DefaultRootWindow( x_display );   // get the root window (usually the whole screen)
+   Window root  =  DefaultRootWindow( x_display ); // get the root window (usually the whole screen)
 
    XSetWindowAttributes  swa;
    swa.event_mask  =  ExposureMask|PointerMotionMask|KeyPressMask|ButtonPress;
@@ -210,7 +227,7 @@ int shGLESinit(GLint width, GLint height)
    XSetWMHints(x_display, win, &hints);
  
    XMapWindow ( x_display , win );             // make the window visible on the screen
-   XStoreName ( x_display , win , "VG test" ); // give the window a name
+   XStoreName ( x_display , win , windowname ); // give the window a name
  
    //// get identifiers for the provided atom name strings
    Atom wm_state   = XInternAtom ( x_display, "_NET_WM_STATE", False );
@@ -283,7 +300,7 @@ int shGLESinit(GLint width, GLint height)
  
    //// egl-contexts collect all state descriptions needed required for operation
    EGLint ctxattr[] = {
-      EGL_CONTEXT_CLIENT_VERSION, 2,
+      EGL_CONTEXT_CLIENT_VERSION, 3,
       EGL_NONE
    };
    egl_context = eglCreateContext ( egl_display, ecfg, EGL_NO_CONTEXT, ctxattr );
@@ -316,6 +333,9 @@ int shGLESinit(GLint width, GLint height)
    tflag_loc    = glGetUniformLocation ( shaderProgram , "texGenflag");
    color4_loc    = glGetUniformLocation ( shaderProgram , "color4");
    texs_loc    = glGetUniformLocation ( shaderProgram , "tex_s");
+   angle_loc   = glGetUniformLocation  ( shaderProgram , "Angle");
+   radius_loc  = glGetUniformLocation  ( shaderProgram , "Radius");
+   centre_loc  = glGetUniformLocation  ( shaderProgram , "Centre");
 
    fprintf(stderr, "Locs: %d %d %d %d %d\n", position_loc, texc_loc,
                     color4_loc, tflag_loc, texs_loc) ;
@@ -325,15 +345,15 @@ int shGLESinit(GLint width, GLint height)
 
 // and initialise. Matrix standard in VG and GL is column order
    GLfloat migu[16] = {1.0,0,0,0 ,0,1.0,0,0, 0,0,1.0,0, 0,0,0,1.0};
-   GLint locm = glGetUniformLocation(shaderProgram, "mview") ;
+   locm = glGetUniformLocation(shaderProgram, "mview") ;
    glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) migu );
-   locm = glGetUniformLocation(shaderProgram, "tview") ;
-   glUniformMatrix4fv(locm, 1, GL_FALSE , (GLfloat *) migu );
-   GLint locb = glGetUniformLocation(shaderProgram, "texGenflag") ;
-   glUniform1i(locb, 0) ;
+   loct = glGetUniformLocation(shaderProgram, "tview") ;
+   glUniformMatrix4fv(loct, 1, GL_FALSE , (GLfloat *) migu );
+   glUniform1i(tflag_loc, 0) ;
 
    glUniform4f(color4_loc, 0.0f, 0.0f, 0.0f, 1.0f);
 
+// This sets glViewport(0, 0, width, height); ie full window
    vgCreateContextSH(width, height);
 
    // So far so good
