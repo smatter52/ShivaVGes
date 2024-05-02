@@ -3,7 +3,9 @@
 See AUTHORS for the list of contributors
 
 ShivaVG(es) is an open-source LGPL ANSI C implementation of the Khronos
-Group OpenVG specification on OpenGL ES 3.0
+Group OpenVG specification on OpenGL ES 3.0.
+
+Performance optimised with global location values
 
 I.    Why 
 
@@ -23,7 +25,7 @@ IV.	IMPLEMENTATION
 	To fix this I have modified the ShivaVG impemetation of Ivan Leben to interface via
 	OpenGL ES 3.0 on EGL and X11.
 
-	Thanks to André Bergner for the PI4 openglex.cpp example. This pointed the way.  
+	Thanks to AndrÃ© Bergner for the PI4 openglex.cpp example. This pointed the way.  
 
 ## II. BUILD
 
